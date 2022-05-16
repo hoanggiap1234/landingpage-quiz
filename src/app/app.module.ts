@@ -10,14 +10,20 @@ import { QuizService } from './service/quiz.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CountdownModule } from 'ngx-countdown';
+import { CommonModule } from '@angular/common';
+import { TimerComponent } from './timer/timer.component';
+import { ResultTestComponent } from './result-test/result-test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuizComponent,
     HomeComponent,
+    TimerComponent,
+    ResultTestComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
