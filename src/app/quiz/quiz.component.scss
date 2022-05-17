@@ -44,24 +44,50 @@ label.radio input:checked + span {
 .btn:active {
   outline: 0 !important;
   box-shadow: none !important;
+  cursor: pointer;
 }
 
 #grid {
     width: auto;
-    height: auto;        
+    height: auto; 
+           
 }
 
 .cell {
     margin-right: 5px;
     font-size: large;
     margin-top: 5px;
-    background-color: #1ABC9C;
+    background-color: darkgrey;
     color: #fff;
     outline: 0px solid #fff;
     float: left;
-    height: 50px;
-    width: 50px;    
-  
+    height: 40px;
+    width: 40px;   
+    
+}
+
+.cellChecked{
+  margin-right: 5px;
+  font-size: large;
+  margin-top: 5px;
+  background-color: rgb(56, 241, 10);
+  color: #fff;
+  outline: 0px solid #fff;
+  float: left;
+  height: 40px;
+  width: 40px; 
+}
+
+.cell_review{
+  margin-right: 5px;
+  font-size: large;
+  margin-top: 5px;
+  background-color: rgb(205, 242, 23);
+  color: #fff;
+  outline: 0px solid #fff;
+  float: left;
+  height: 40px;
+  width: 40px; 
 }
 
 // timer
@@ -72,6 +98,6 @@ label.radio input:checked + span {
   border-radius: 15px;
 }
 
-.btn {
-  cursor: pointer;
+.selected-div{
+  background-color: #86213e;
 }

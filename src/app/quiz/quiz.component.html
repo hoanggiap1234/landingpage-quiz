@@ -22,10 +22,27 @@
 <section class="page-section portfolio" id="portfolio">
 
     <div class="row">
-        <div class="col-sm-2 mt-5">
-           
-            <ul>
-                <li class=" bg-secondary text-center mb-2 " >
+        <div class="col-sm-2 mt-5" >
+            <div  style="position: fixed ;left: 2%;">
+                <div class="bg-danger">
+                    <h5 class="  text-white text-center pt-3 fs-5 px-2" for=""> THỜI GIAN LÀM BÀI </h5>
+
+                <hr style="background-color:white">
+                <h1 class="text-center justify-content-center pb-2">
+                    <countdown #countdown [config]="{leftTime: time}" (event)="handleEventCountDown($event)">
+                    </countdown>
+                </h1>
+                </div>
+                <hr>
+                <div class="d-grid">
+                    <button class="btn btn-primary fs-5" type="button" (click)="submitResultTest()">Kết thúc bài
+                        thi</button>
+                </div>
+            </div>
+            
+
+            <!-- <ul> -->
+                <!-- <li class=" bg-secondary text-center mb-2 " >
                     <a  class="nav-link align-middle px-0">
                        <span class=" btn ms-1  d-sm-inline text-white fs-4" routerLink="/quiz">Bài kiểm tra</span>
                     </a>
@@ -34,43 +51,56 @@
                     <a  class="nav-link align-middle px-0">
                        <span class=" btn ms-1 d-sm-inline text-white fs-4" (click)="redirectToResultTest()">Kết quả kiểm tra</span>
                     </a>
+                </li> -->
+                <!-- <li class=" bg-secondary mb-2 ">
+                    <a class="nav-link align-middle px-0">
+                        <span class=" btn ms-1 d-sm-inline text-white fs-5">Làm lại</span>
+                    </a>
                 </li>
-            </ul>
+            </ul> -->
         </div>
-      
-        <div class="col-sm-8">
+
+        <div class="col-sm-8 fs-5">
             <div class="container mt-5">
                 <div class="d-flex justify-content-center row">
                     <div class="col-md-12 col-lg-12">
                         <div class="border">
                             <div class="question bg-white p-3 border-bottom">
                                 <div class="d-flex flex-row justify-content-between align-items-center mcq">
-                                    <h4>Câu số: {{questionNo +1}}</h4><span>(Tổng số: {{questions.length}} câu hỏi)</span>
+                                    <h4>Câu số: {{questionNo +1}}</h4>
+                                    <span>(Tổng số: {{questions.length}} câu hỏi)</span>
+                                    <span class="form-check form-group mb-2 float-end">
+                                        <label class="form-check-label">Xem lại</label>
+                                        <input class="form-check-input" [ngClass]="'review'+ questionNo" type="checkbox" value="" id="checkbox-review" (click)="onCheckedReview(questionNo, questions[questionNo])"/>
+                                    </span>
                                 </div>
                             </div>
                             <div class="question bg-white p-3 border-bottom">
-                                <div class="d-flex flex-row align-items-center question-title" >
+                                <div class="d-flex flex-row align-items-center question-title">
                                     <h3 class="text-danger">Q.</h3>
                                     <h5 class="mt-1 ml-2"> {{questions[questionNo].title}}?</h5>
                                 </div>
-                                <div> 
+                                <div>
                                     <div [innerHTML]="questions[questionNo].description"></div>
                                     <!-- <div [innerHTML]="htmlContent"></div> -->
                                 </div>
                                 <div class="mt-5">
-                                    <div class="form-check form-group mb-2" *ngFor="let item of questions[questionNo].answerDTOS">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"  [checked]="item.status" (click)="onClickChecBox(item)" [disabled]="isDisabled" />
-                                        <label class="form-check-label" for="flexCheckDefault">{{item.answer}}</label>
+                                    <div class="form-check form-group mb-2"
+                                        *ngFor="let option of questions[questionNo].answerDTOS">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                            [checked]="option.status" (click)="onClickChecBox(option, questions[questionNo] )"
+                                            [disabled]="isDisabled" />
+                                        <label class="form-check-label" for="flexCheckDefault">{{option.answer}}</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
-                                <button
-                                    class="btn btn-primary d-flex align-items-center btn-danger" type="button" (click)="previousQuestion()">
-                                    Câu hỏi trước
+                                <button class="btn btn-primary d-flex align-items-center btn-danger" type="button"
+                                    (click)="previousQuestion()">
+                                    Câu trước
                                 </button>
-                                <button
-                                    class="btn btn-primary border-success align-items-center btn-success" type="button" (click)="nextQuestion()">Câu hỏi tiếp theo
+                                <button class="btn btn-primary border-success align-items-center btn-success"
+                                    type="button" (click)="nextQuestion()">Câu tiếp theo
                                 </button>
                             </div>
                         </div>
@@ -78,52 +108,26 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2 mt-5 ">
+        <div class="col-sm-2 mt-5 " style=" position: fixed ; left: 81%;">
             
-                <div class="bg-danger">
-                    <h5 class="  text-white text-center pt-3 " for=""> THỜI GIAN LÀM BÀI </h5>
-                   
-                    <hr style="background-color:white">
-                    <h1  class="text-center justify-content-center pb-2"><countdown #countdown [config]="{leftTime: time}" (event)="handleEventCountDown($event)" ></countdown></h1>
+            <div class=" bg-secondary  pt-2 pb-1 px-1 text-white" style="margin-right: 5px;">
+                <h5 class="text-center"> Danh sách câu hỏi</h5>
+            </div>
+            <div #elmoption>
+                <div   class="align-items-top mt-1" >
+                    <div >
+                        <div id="grid" *ngFor="let question of questions ; let i = index">
+                            <a>
+                                <div class=" btn cell"  [ngClass]="'id'+ question.id" (click)="openQuestion(i)"> {{i+1}} </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <hr>
-            <div class=" bg-secondary  pt-2 pb-1 px-1 text-white ">
-              <h5 class="text-center"> Danh sách câu hỏi</h5> 
-            </div>
-            <div class=" d-flex align-items-top  text-center" >
-                <div id="grid"  *ngFor="let question of questions ; let i = index">
-                    <a><div class=" btn cell fs-3 " (click)="openQuestion(i)" >{{i+1}} </div></a>
-                    <!-- <div class="cell">2</div>
-                    <div class="cell">3</div>
-                    <div class="cell">4</div>
-                    <div class="cell">5</div>
-                    <div class="cell">6</div>
-                    <div class="cell">7</div>
-                    <div class="cell">8</div>
-                    <div class="cell">9</div>
-                    <div class="cell">10</div>
-                    <div class="cell">11</div>
-                    <div class="cell">12</div>
-                    <div class="cell">13</div>
-                    <div class="cell">14</div>
-                    <div class="cell">15</div>
-                    <div class="cell">16</div>
-                    <div class="cell">17</div>
-                    <div class="cell">18</div>
-                    <div class="cell">19</div>
-                    <div class="cell">20</div> -->
-                </div>            
-            </div>
-            <div class="d-grid mt-5">
-                <button class="btn btn-primary fs-3" type="button" (click)="submitResultTest()">Gửi Bài</button>
             </div>
         </div>
-
-       
-
     </div>
 </section>
-<footer class="footer text-center">
+<footer class="navbar text-center ">
     <!-- <div class="container">
         <div class="row"> -->
             <!-- Footer Location-->
