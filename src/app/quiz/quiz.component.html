@@ -20,8 +20,8 @@
     </div>
 </nav>
 <section class="page-section portfolio" id="portfolio">
+    <div class="d-flex">
 
-    <div class="row">
         <div class="col-sm-2 mt-5" >
             <div  style="position: fixed ;left: 2%;">
                 <div class="bg-danger">
@@ -40,7 +40,6 @@
                 </div>
             </div>
             
-
             <!-- <ul> -->
                 <!-- <li class=" bg-secondary text-center mb-2 " >
                     <a  class="nav-link align-middle px-0">
@@ -66,12 +65,12 @@
                     <div class="col-md-12 col-lg-12">
                         <div class="border">
                             <div class="question bg-white p-3 border-bottom">
-                                <div class="d-flex flex-row justify-content-between align-items-center mcq">
+                                <div #elmreview class="d-flex flex-row justify-content-between align-items-center mcq">
                                     <h4>Câu số: {{questionNo +1}}</h4>
                                     <span>(Tổng số: {{questions.length}} câu hỏi)</span>
                                     <span class="form-check form-group mb-2 float-end">
                                         <label class="form-check-label">Xem lại</label>
-                                        <input class="form-check-input" [ngClass]="'review'+ questionNo" type="checkbox" value="" id="checkbox-review" (click)="onCheckedReview(questionNo, questions[questionNo])"/>
+                                        <input class="form-check-input" type="checkbox" [checked]="questions[questionNo].review"  [ngClass]="'review'+ questionNo" (click)="onCheckedReview( questionNo, questions[questionNo])"/>
                                     </span>
                                 </div>
                             </div>
@@ -108,17 +107,20 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2 mt-5 " style=" position: fixed ; left: 81%;">
+
+        <div class="col-md-2 col-sm-12 mt-5 col-2-right ">
             
             <div class=" bg-secondary  pt-2 pb-1 px-1 text-white" style="margin-right: 5px;">
                 <h5 class="text-center"> Danh sách câu hỏi</h5>
             </div>
             <div #elmoption>
                 <div   class="align-items-top mt-1" >
-                    <div >
-                        <div id="grid" *ngFor="let question of questions ; let i = index">
+                    <div style="    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: start;" >
+                        <div id="grid" *ngFor="let question of questions ; let i = index" style="margin-right: 5px;">
                             <a>
-                                <div class=" btn cell"  [ngClass]="'id'+ question.id" (click)="openQuestion(i)"> {{i+1}} </div>
+                                <div class=" btn cell d-flex"  [ngClass]="'id'+ question.id" (click)="openQuestion(i)"> {{i+1}} </div>
                             </a>
                         </div>
                     </div>
@@ -127,35 +129,45 @@
         </div>
     </div>
 </section>
-<footer class="navbar text-center ">
-    <!-- <div class="container">
-        <div class="row"> -->
-            <!-- Footer Location-->
-            <!-- <div class="col-lg-4 mb-5 mb-lg-0">
-                <h4 class="text-uppercase mb-4">Location</h4>
-                <p class="lead mb-0">
-                    2215 John Daniel Drive
-                    <br />
-                    Clark, MO 65243
-                </p>
-            </div> -->
-            <!-- Footer Social Icons-->
-            <!-- <div class="col-lg-4 mb-5 mb-lg-0">
-                <h4 class="text-uppercase mb-4">Around the Web</h4>
-                <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
-                <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
-                <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
-                <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
-            </div> -->
-            <!-- Footer About Text-->
-            <!-- <div class="col-lg-4">
-                <h4 class="text-uppercase mb-4">About Freelancer</h4>
-                <p class="lead mb-0">
-                    Freelance is a free to use, MIT licensed Bootstrap theme created by
-                    <a href="http://startbootstrap.com">Start Bootstrap</a>
-                    .
-                </p>
-            </div> -->
-        <!-- </div>
-    </div> -->
-</footer>
+<!-- 
+<div class="container" style="border:1px solid red ;">
+    <div class="d-flex flex-wrap">
+        <div class="test1 col-6 col-md-3 col-sm-4">
+            <button class="btn btn-danger"> test1</button>
+        </div>
+        <div class="test2 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test2</button>
+        </div>
+        <div class="test3 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-primary"> test3</button>
+        </div>
+        <div class="test1 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test1</button>
+        </div>
+        <div class="test2 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test2</button>
+        </div>
+        <div class="test3 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-primary"> test3</button>
+        </div>
+        <div class="test1 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test1</button>
+        </div>
+        <div class="test2 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test2</button>
+        </div>
+        <div class="test3 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-primary"> test3</button>
+        </div>
+        <div class="test1 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test1</button>
+        </div>
+        <div class="test2 col-6 col-md-3 col-sm-4 ">
+            <button class="btn btn-danger"> test2</button>
+        </div>
+        <div class="test3 col-6 col-md-3  col-sm-4">
+            <button class="btn btn-primary"> test3</button>
+        </div>
+
+    </div>
+</div> -->

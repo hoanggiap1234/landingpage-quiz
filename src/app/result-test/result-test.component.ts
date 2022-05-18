@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IQuestion } from '../model/question';
 import { HighLightService } from '../service/high-light.service';
 import { QuizService } from '../service/quiz.service';
+export enum KEY_CODE {
+  RIGHT_ARROW = 39,
+  LEFT_ARROW = 37,
+  UP_ARROW = 38,
+  DOWN_ARROW = 40,
+  SPACE_ARROW = 32
+}
 
 @Component({
   selector: 'app-result-test',
@@ -13,6 +20,7 @@ export class ResultTestComponent implements OnInit {
 
   questions!: IQuestion[];
   resultTest : any
+  questionNo = 0;
   private highlighted: boolean = false
   constructor(
     private quizService : QuizService,
@@ -58,6 +66,41 @@ export class ResultTestComponent implements OnInit {
     sessionStorage.removeItem('user')
     localStorage.clear();
     this.router.navigate(['']);
+  }
+
+  nextQuestion() {
+    if (this.questionNo == this.questions.length - 1) {
+      this.questionNo = this.questions.length - 1;
+    } else {
+      this.questionNo++;
+    }
+    console.log(this.questions[this.questionNo]);
+  }
+
+  previousQuestion() {
+    if (this.questionNo == 0) {
+      this.questionNo = 0;
+    } else {
+      this.questionNo--;  
+    }
+    console.log(this.questions[this.questionNo]);
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event);
+
+    if (event.keyCode === KEY_CODE.RIGHT_ARROW) {
+      this.nextQuestion();
+    }
+
+    if (event.keyCode === KEY_CODE.LEFT_ARROW) {
+      this.previousQuestion();
+    }
+    // if (event.keyCode === KEY_CODE.UP_ARROW) {
+    // }
+    // if (event.keyCode === KEY_CODE.DOWN_ARROW) {
+    // }
   }
 
 }

@@ -75,8 +75,10 @@ export class QuizComponent implements OnInit {
       // console.log(data);
       
       data.forEach((item: IQuestion) => {
+        item.review = false;
         item.answerDTOS.forEach((element: any) => {
           element['status'] = false;
+         
         });
       });
     });    
@@ -128,6 +130,9 @@ export class QuizComponent implements OnInit {
   @ViewChild('elmoption')
   optionElement!: ElementRef;
 
+  @ViewChild('elmreview')
+  reviewElement!: ElementRef;
+
   onClickChecBox(option: any, question: any) {
     const questionId = question.id;
     this.questions.forEach((element) => {
@@ -170,33 +175,45 @@ export class QuizComponent implements OnInit {
    
   }
   isReview = false;
-  onCheckedReview(questionNo : any, question : any){
-    const questionId = question.id;
+  
+  onCheckedReview(questionNo: any, questionParam: any) {
+
+    this.questions.forEach((question) => {
+      if (question.id == questionParam.id) {
+        if (question.review == true)
+          question.review = false;
+        else
+          question.review = true;
+      }
+     
+      
+    });
+     
+    const questionId = questionParam.id;
     const className = '.id' + questionId;
-    const reviewID = '.review'+ questionNo ;
-    console.log( );
-    // this.optionElement.nativeElement.querySelector(reviewID).forEach((review : any)=>{
-    //        console.log("is click review");
-           
+    const reviewID = '.review' + questionNo;
+    
+    // const el = this.reviewElement.nativeElement.querySelector(reviewID).addEventListener("click", function(){
+    //   console.log("in element addeventlistenner");
+      
     // })
     
-    this.optionElement.nativeElement.querySelectorAll(className).forEach(
-      (cauhoi: any) => {
-        cauhoi.classList.remove('cellChecked');
-        cauhoi.classList.add('cell_review');
-      }
-    )   
-     
+        if (this.reviewElement.nativeElement.querySelector(reviewID).checked === true) {
+          this.optionElement.nativeElement.querySelector(className).classList.remove('cell_review');
+          this.optionElement.nativeElement.querySelector(className).classList.add('cell_review');
+        }
+        if (this.reviewElement.nativeElement.querySelector(reviewID).checked === false) {
+          this.optionElement.nativeElement.querySelector(className).classList.remove('cell_review');
+        }
   }
-
-
+ 
   nextQuestion() {
     if (this.questionNo == this.questions.length - 1) {
       this.questionNo = this.questions.length - 1;
     } else {
       this.questionNo++;
     }
-    console.log(this.questionNo);
+    console.log(this.questions[this.questionNo]);
   }
 
   previousQuestion() {
@@ -205,6 +222,7 @@ export class QuizComponent implements OnInit {
     } else {
       this.questionNo--;
     }
+    console.log(this.questions[this.questionNo]);
   }
 
   openQuestion(index: number) {

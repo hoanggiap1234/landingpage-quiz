@@ -60,12 +60,14 @@ label.radio input:checked + span {
     background-color: darkgrey;
     color: #fff;
     outline: 0px solid #fff;
-    float: left;
     height: 40px;
-    width: 40px;   
-    
+    width: 40px;
+    justify-content: center;
 }
 
+*{
+  box-sizing: border-box;
+}
 .cellChecked{
   margin-right: 5px;
   font-size: large;
@@ -100,4 +102,14 @@ label.radio input:checked + span {
 
 .selected-div{
   background-color: #86213e;
+}
+@media only screen and (max-width: 150px) {
+  .col-2-right{
+     position: fixed ; right: 2px;
+  }
+}
+@media only screen and (max-width: 756px) {
+  .col-2-right{
+   width: 100%;
+  }
 }
