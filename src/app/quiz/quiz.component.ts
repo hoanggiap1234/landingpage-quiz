@@ -1,5 +1,6 @@
+import { DOCUMENT } from '@angular/common';
 import { EventHandlerVars } from '@angular/compiler/src/compiler_util/expression_converter';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CountdownComponent } from 'ngx-countdown';
 import { catchError, map } from 'rxjs';
@@ -9,6 +10,7 @@ import { UserModule } from '../model/user';
 import { HighLightService } from '../service/high-light.service';
 import { QuizService } from '../service/quiz.service';
 import { UserService } from '../service/user.service';
+import * as $ from 'jquery'
 
 export enum KEY_CODE {
   RIGHT_ARROW = 39,
@@ -25,7 +27,7 @@ export enum KEY_CODE {
 })
 export class QuizComponent implements OnInit {
    
-  htmlContent: string = "<pre><code class=\"language-java\"><p>public&nbsp;class&nbsp;Main {&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;private&nbsp;int i = 1;&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;public&nbsp;static&nbsp;void main(String argv[]) {&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; int i = 2;&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Main s =&nbsp;new&nbsp;Main();&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; s.someMethod();&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;public&nbsp;static&nbsp;void someMethod(){&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; System.out.println(i);&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}&nbsp;</p></code></pre>";
+  // htmlContent: string = "<pre><code class=\"language-java\"><p>public&nbsp;class&nbsp;Main {&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;private&nbsp;int i = 1;&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;public&nbsp;static&nbsp;void main(String argv[]) {&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; int i = 2;&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Main s =&nbsp;new&nbsp;Main();&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; s.someMethod();&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;public&nbsp;static&nbsp;void someMethod(){&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; System.out.println(i);&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}&nbsp;</p>\n  <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}&nbsp;</p></code></pre>";
 
   @ViewChild('countdown', { static: false })
   private countdown!: CountdownComponent;
@@ -34,7 +36,7 @@ export class QuizComponent implements OnInit {
   questions: IQuestion[] = [];
   questionNo!: number;
   isDisabled = false;
-  time: number = 100;
+  time: number = 180;
   countdownTime: number = 0;
   user: UserModule.IUser = {
     name: '',
@@ -47,13 +49,16 @@ export class QuizComponent implements OnInit {
     answerIDs: []
   };
   listAnswerId: string[] = [];
- 
+  hightlight = 'check-option'
 
   constructor(
     private highlightService: HighLightService
     ,private quizService: QuizService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private elem: ElementRef,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) document: Document
     ) {
 
   }
@@ -70,8 +75,10 @@ export class QuizComponent implements OnInit {
       // console.log(data);
       
       data.forEach((item: IQuestion) => {
+        item.review = false;
         item.answerDTOS.forEach((element: any) => {
           element['status'] = false;
+         
         });
       });
     });    
@@ -81,10 +88,11 @@ export class QuizComponent implements OnInit {
   // Nếu chưa nhập thông tin sẽ quay về trang đăng nhập thông tin
   checkLoginUser(){
     const jsonUser = sessionStorage.getItem('user');
-    this.user = JSON.parse(jsonUser!.toString());
-    if(this.user === undefined || this.user === null ){
+    if(jsonUser == undefined || jsonUser == null ){
       this.router.navigate([''])
     }
+    this.user = JSON.parse(jsonUser!.toString());
+    
   }
 
   ngAfterViewInit () {
@@ -98,13 +106,11 @@ export class QuizComponent implements OnInit {
     this.countdownTime = $event.left;
     if ($event.left === 0) {
       this.isDisabled = true;
-      alert("Time's up, mate")
+      alert("Hết thời gian, hệ thống sẽ tự động hiển thị kết quả làm bài");
+      // submit and redirect to result
+      this.submitResultTest();
     }
-    // if(localStorage.getItem('timeLocal') == 'started' ){
-    //   console.log($event.left);
-      
-    //   this.time = $event.left
-    // }
+   
   }
 
   onTimerFinished() {
@@ -119,30 +125,95 @@ export class QuizComponent implements OnInit {
       // this.highlighted = true
     }
   }
+// add viewchid để set color cho matran câu hỏi
+  // add viewchid để set color cho matran câu hỏi
+  @ViewChild('elmoption')
+  optionElement!: ElementRef;
 
-  onClickChecBox(item: any) {
+  @ViewChild('elmreview')
+  reviewElement!: ElementRef;
+
+  onClickChecBox(option: any, question: any) {
+    const questionId = question.id;
     this.questions.forEach((element) => {
       element.answerDTOS.forEach((record) => {
         if (record.status == false) {
-          if (record.id == item.id) {
+          if (record.id == option.id) {
             record.status = true;
           }
         } else {
-          if (record.id == item.id) {
+          if (record.id == option.id) {
             record.status = false;
           }
         }
       });
     });
-  }
+    console.log(questionId);
+    let elements = document.getElementsByClassName(questionId);
+    console.log(elements);
+    // elements.classList.add("mystyle");
+    const className = '.id' + questionId;
+    this.optionElement.nativeElement.querySelectorAll(className).forEach(
+      (cauhoi: any) => {
 
+        let check = false
+
+        for( let i = 0; i< question.answerDTOS.length; i++){          
+          if(question.answerDTOS[i].status == true){
+            check = true;
+          }         
+        }
+
+        if(check == true ){
+          cauhoi.classList.add('cellChecked');
+        } else {
+          cauhoi.classList.remove('cellChecked');
+        }
+      }
+    )   
+
+   
+  }
+  isReview = false;
+  
+  onCheckedReview(questionNo: any, questionParam: any) {
+
+    this.questions.forEach((question) => {
+      if (question.id == questionParam.id) {
+        if (question.review == true)
+          question.review = false;
+        else
+          question.review = true;
+      }
+     
+      
+    });
+     
+    const questionId = questionParam.id;
+    const className = '.id' + questionId;
+    const reviewID = '.review' + questionNo;
+    
+    // const el = this.reviewElement.nativeElement.querySelector(reviewID).addEventListener("click", function(){
+    //   console.log("in element addeventlistenner");
+      
+    // })
+    
+        if (this.reviewElement.nativeElement.querySelector(reviewID).checked === true) {
+          this.optionElement.nativeElement.querySelector(className).classList.remove('cell_review');
+          this.optionElement.nativeElement.querySelector(className).classList.add('cell_review');
+        }
+        if (this.reviewElement.nativeElement.querySelector(reviewID).checked === false) {
+          this.optionElement.nativeElement.querySelector(className).classList.remove('cell_review');
+        }
+  }
+ 
   nextQuestion() {
     if (this.questionNo == this.questions.length - 1) {
       this.questionNo = this.questions.length - 1;
     } else {
       this.questionNo++;
     }
-    console.log(this.questionNo);
+    console.log(this.questions[this.questionNo]);
   }
 
   previousQuestion() {
@@ -151,6 +222,7 @@ export class QuizComponent implements OnInit {
     } else {
       this.questionNo--;
     }
+    console.log(this.questions[this.questionNo]);
   }
 
   openQuestion(index: number) {
@@ -169,10 +241,10 @@ export class QuizComponent implements OnInit {
     if (event.keyCode === KEY_CODE.LEFT_ARROW) {
       this.previousQuestion();
     }
-    if (event.keyCode === KEY_CODE.UP_ARROW) {
-    }
-    if (event.keyCode === KEY_CODE.DOWN_ARROW) {
-    }
+    // if (event.keyCode === KEY_CODE.UP_ARROW) {
+    // }
+    // if (event.keyCode === KEY_CODE.DOWN_ARROW) {
+    // }
   }
 
   closeExamp(event: any) {
@@ -182,49 +254,58 @@ export class QuizComponent implements OnInit {
     // alert('Hết thời gian làm bài');
   }
 
-  submitResultTest(){
-    console.log(this.questions);
-    
-    console.log("is submit result test");
-  
+  submitResultTest() {
+    // console.log(this.questions);
+    // console.log("is submit result test");
     this.questions.forEach((element) => {
       element.answerDTOS.forEach((record) => {
         if (record.status == true) {
-           this.listAnswerId.push(record.id)
+          this.listAnswerId.push(record.id)
         }
       });
     });
 
     this.resultTest.email = this.user.email;
     this.resultTest.mobile = this.user.phone;
-    this.resultTest.answerIDs =  this.listAnswerId;
+    this.resultTest.answerIDs = this.listAnswerId;
 
-    console.log(this.resultTest);
+    // console.log(this.resultTest);
+    this.callAPIPostDataQuizToDb();
+  }
+
+  callAPIPostDataQuizToDb(){
     this.quizService.postTestResult(this.resultTest).pipe(
       map(resp => resp),
       catchError(err => {
         throw err;
       })
-    )
-      .subscribe(
-        resp => {
-          console.log(resp)
-          localStorage.setItem('userId',resp);
-        },
-        
-        err => console.log(err)
-      );
+    ).subscribe(
+      resp => {
+        console.log(resp)
+        localStorage.setItem('userId', resp);
+        if (resp != null) {
+          // console.log(id);
+          localStorage.setItem('questions', JSON.stringify(this.questions));
 
-      this.redirectToResultTest()
+          // this.redirectToResultTest(id)
+          this.quizService.getResultTest(resp);
+          this.router.navigate(['/result']);
+        }
+      },
+
+      err => console.log(err)
+    );
   }
 
-  redirectToResultTest(){
-    const id = localStorage.getItem('userId');
-    console.log(id);
-    if (id != null)
-    this.quizService.getResultTest(id);
-    this.router.navigate(['/result']);
+  resetQuiz(){
+    localStorage.removeItem('questions');
+    localStorage.removeItem('userId');
+    sessionStorage.removeItem('user')
+    localStorage.clear();
+    this.router.navigate(['']);
   }
+
+  
   
 
 }

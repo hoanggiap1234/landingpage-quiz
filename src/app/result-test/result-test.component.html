@@ -1,7 +1,7 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand  align-items-center" href="#page-top">Bài thi trắc nghiệm java</a>
+        <a class="navbar-brand  align-items-center text-center" href="#page-top">Kết quả bài thi trắc nghiệm Java</a>
         <!-- <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -25,20 +25,25 @@
         <div class="col-sm-2 mt-5">
            
             <ul>
-                <li class=" bg-secondary text-center mb-2 " >
+                <!-- <li class=" bg-secondary mb-2 " >
                     <a  class="nav-link align-middle px-0">
-                       <span class=" btn ms-1  d-sm-inline text-white fs-4" routerLink="/quiz">Bài kiểm tra</span>
+                       <span class=" btn ms-1  d-sm-inline text-white fs-5" routerLink="/quiz">Bài kiểm tra</span>
                     </a>
-                </li>
-                <li class=" bg-secondary text-center mb-2 " >
+                </li> -->
+                <!-- <li class=" bg-secondary mb-2 " >
                     <a  class="nav-link align-middle px-0">
-                       <span class=" btn ms-1 d-sm-inline text-white fs-4">Kết quả kiểm tra</span>
+                       <span class=" btn ms-1 d-sm-inline text-white fs-5">Kết quả kiểm tra</span>
                     </a>
-                </li>
+                </li> -->
+                <!-- <li class=" bg-secondary mb-2 " >
+                    <a  class="nav-link align-middle px-0" (click)="resetQuiz()">
+                       <span class=" btn ms-1 d-sm-inline text-white fs-5">Làm lại</span>
+                    </a>
+                </li> -->
             </ul>
         </div>
       
-        <div class="col-sm-8">
+        <!-- <div class="col-sm-8">
             <div class="container mt-5">
                 <div class="d-flex justify-content-center row mt-2" *ngFor="let answer of resultTest.yourQuestions; let i=index">
                     <div class="col-md-12 col-lg-12">
@@ -67,7 +72,87 @@
                     </div>
                 </div>
             </div>
+        </div> -->
+        <div class="col-sm-8 fs-5">
+            <div class="container mt-5">
+                <div class="d-flex justify-content-center row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="border">
+                            <div class="question bg-white p-3 border-bottom">
+                                <div #elmreview class="d-flex flex-row justify-content-between align-items-center mcq">
+                                    <h4>Câu số: {{questionNo +1}}</h4>
+                                    <span>(Tổng số: {{questions.length}} câu hỏi)</span>
+                                    <!-- <span class="form-check form-group mb-2 float-end">
+                                        <label class="form-check-label">Xem lại</label>
+                                        <input class="form-check-input" type="checkbox" [checked]="questions[questionNo].review"  [ngClass]="'review'+ questionNo" (click)="onCheckedReview( questionNo, questions[questionNo])"/>
+                                    </span> -->
+                                </div>
+                            </div>
+                            <div class="question bg-white p-3 border-bottom">
+                                <div class="d-flex flex-row align-items-center question-title">
+                                    <h3 class="text-danger">Q.</h3>
+                                    <h5 class="mt-1 ml-2"> {{questions[questionNo].title}}?</h5>
+                                </div>
+                                <div>
+                                    <div [innerHTML]="questions[questionNo].description"></div>
+                                    <!-- <div [innerHTML]="htmlContent"></div> -->
+                                </div>
+                                <div class="mt-5">
+                                    <div class="form-check form-group mb-2"
+                                        *ngFor="let option of questions[questionNo].answerDTOS">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                            [checked]="option.status"
+                                            [disabled]="true" />
+                                        <label class="form-check-label" for="flexCheckDefault">{{option.answer}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
+                                <button class="btn btn-primary d-flex align-items-center btn-danger" type="button"
+                                    (click)="previousQuestion()">
+                                    Câu trước
+                                </button>
+                                <button class="btn btn-primary border-success align-items-center btn-success"
+                                    type="button" (click)="nextQuestion()">Câu tiếp theo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- <div class="col-sm-8">
+            <div class="container mt-5">
+                <div class="d-flex justify-content-center row mt-2" *ngFor="let question of questions; let i=index">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="border">
+                            <div class="question bg-white p-3 border-bottom">
+                                <div class="d-flex flex-row justify-content-between align-items-center mcq">
+                                    <h4>Câu số: {{i+1}} </h4><span>( {{i+1}}/{{questions.length}} )</span>
+                                </div>
+                            </div>
+                            <div class="question bg-white p-3 border-bottom">
+                                <div class="d-flex flex-row align-items-center question-title" >
+                                    <h3 class="text-danger">Q.</h3>
+                                    <h5 class="mt-1 ml-2">{{question.title}}?</h5>
+                                </div>
+                                <div>
+                                    <div [innerHTML]="question.description"></div>
+                                </div>
+                                <div class="mt-5">
+                                    <div class="form-check form-group mb-2" *ngFor="let option of question.answerDTOS">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [checked]="option.status" [disabled]="true" />
+                                        <label class="form-check-label" for="flexCheckDefault">{{option.answer}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        
         <div class="col-sm-2 mt-5 pt-2 " style="background-color: bisque">        
             <div class=" bg-primary  pt-2 pb-1 px-2 text-white mb-3 ">
                 <h5> Tổng số câu trả lời: <span class="float-end"> {{resultTest.totalAnswer}}</span></h5>
@@ -86,7 +171,10 @@
             </div>
         </div>
     </div>
+    
 </section>
+
+
 <footer class="footer text-center">
     <!-- <div class="container">
         <div class="row"> -->

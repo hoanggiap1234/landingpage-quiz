@@ -154,24 +154,23 @@
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="name" type="text" placeholder="Enter your name..."  formControlName="name"/>
                                 <label for="name">Họ và tên</label>
-                                <div *ngIf="this.userForm.controls['name'].touched && this.userForm.controls['name'].invalid"></div>
-                                <div *ngIf="this.userForm.controls['name'].errors && this.userForm.controls['name'].errors['required']" class="text-danger">Bạn cần nhập họ và tên.</div>
+                                <!-- <div *ngIf="this.userForm.controls['name'].touched && this.userForm.controls['name'].invalid"> Lỗi</div> -->
+                                <div *ngIf="this.userForm.controls['name'].touched && this.userForm.controls['name'].errors && this.userForm.controls['name'].errors['required']" class="text-danger">Bạn cần nhập họ và tên.</div>
                             </div>
                             <!-- Email address input-->
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="email" type="email" placeholder="name@example.com"  formControlName = "email" />
                                 <label for="email">Địa chỉ Email</label>
-                                <div *ngIf="userForm.controls['email'].touched && userForm.controls['email'].invalid"></div>
-                                <div *ngIf="userForm.controls['email'].errors && userForm.controls['email'].errors['required']" class="text-danger">Bạn cần nhập email.</div>
-                                <div *ngIf="userForm.controls['email'].errors && userForm.controls['email'].errors['pattern']" class="text-danger">Email không đúng định dạng.</div>
+                                <div *ngIf="userForm.controls['email'].touched &&  userForm.controls['email'].errors && userForm.controls['email'].errors['required']" class="text-danger">Bạn cần nhập email.</div>
+                                <div *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors && userForm.controls['email'].errors['pattern']" class="text-danger">Email không đúng định dạng.</div>
                             </div>
                             <!-- Phone number input-->
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" formControlName="phone" />
                                 <label for="phone">Số điện thoại</label>
-                                <div *ngIf="userForm.controls['phone'].touched && userForm.controls['phone'].invalid"></div>
-                                <div *ngIf="userForm.controls['phone'].errors && userForm.controls['phone'].errors['required']" class="text-danger">Bạn cần nhập số điện thoại.</div>
-                                <div *ngIf="userForm.controls['phone'].errors && userForm.controls['phone'].errors['pattern']" class="text-danger">Số điện thoại không đúng định dạng.</div>
+                                <!-- <div *ngIf="userForm.controls['phone'].touched && userForm.controls['phone'].invalid">Lỗi</div> -->
+                                <div *ngIf="userForm.controls['phone'].touched && userForm.controls['phone'].errors && userForm.controls['phone'].errors['required']" class="text-danger">Bạn cần nhập số điện thoại.</div>
+                                <div *ngIf="userForm.controls['phone'].touched && userForm.controls['phone'].errors && userForm.controls['phone'].errors['pattern']" class="text-danger">Số điện thoại không đúng định dạng.</div>
                             </div>
                             
                             <!-- Submit success message-->
