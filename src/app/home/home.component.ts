@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
     ){}
  
     startQuiz(){
+      alert("Bạn sẽ được chuyển sang trang làm bài thi !")
     this.setDataFromFormToModel();
     this.router.navigate(['/quiz'])
   }

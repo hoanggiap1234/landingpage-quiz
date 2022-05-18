@@ -1,77 +1,115 @@
 body{
-    background-color:#eee;
+  background-color:#eee;
 }
 
 label.radio {
-  cursor: pointer;
+cursor: pointer;
 }
 
 label.radio input {
-  position: absolute;
-  top: 0; 
-  left: 0;
-  visibility: hidden;
-  pointer-events: none;
+position: absolute;
+top: 0; 
+left: 0;
+visibility: hidden;
+pointer-events: none;
 }
 
 label.radio span {
-  padding: 4px 0px;
-  border: 1px solid red;
-  display: inline-block;
-  color: red;
-  width: 100px;
-  text-align: center;
-  border-radius: 3px;
-  margin-top: 7px;
-  text-transform: uppercase;
+padding: 4px 0px;
+border: 1px solid red;
+display: inline-block;
+color: red;
+width: 100px;
+text-align: center;
+border-radius: 3px;
+margin-top: 7px;
+text-transform: uppercase;
 }
 
 label.radio input:checked + span {
-  border-color: red;
-  background-color: red;
-  color: #fff;
+border-color: red;
+background-color: red;
+color: #fff;
 }
 
 .ans {
-  margin-left: 36px !important;
+margin-left: 36px !important;
 }
 
 .btn:focus {
-  outline: 0 !important;
-  box-shadow: none !important;
+outline: 0 !important;
+box-shadow: none !important;
 }
 
 .btn:active {
-  outline: 0 !important;
-  box-shadow: none !important;
+outline: 0 !important;
+box-shadow: none !important;
+cursor: pointer;
 }
 
 #grid {
-    width: auto;
-    height: auto;        
+  width: auto;
+  height: auto; 
+         
 }
 
 .cell {
-    margin-right: 5px;
-    font-size: large;
-    margin-top: 5px;
-    background-color: #1ABC9C;
-    color: #fff;
-    outline: 0px solid #fff;
-    float: left;
-    height: 50px;
-    width: 50px; 
+  margin-right: 5px;
+  font-size: large;
+  margin-top: 5px;
+  background-color: darkgrey;
+  color: #fff;
+  outline: 0px solid #fff;
+  height: 40px;
+  width: 40px;
+  justify-content: center;
+}
+
+*{
+box-sizing: border-box;
+}
+.cellChecked{
+margin-right: 5px;
+font-size: large;
+margin-top: 5px;
+background-color: rgb(56, 241, 10);
+color: #fff;
+outline: 0px solid #fff;
+float: left;
+height: 40px;
+width: 40px; 
+}
+
+.cell_review{
+margin-right: 5px;
+font-size: large;
+margin-top: 5px;
+background-color: rgb(205, 242, 23);
+color: #fff;
+outline: 0px solid #fff;
+float: left;
+height: 40px;
+width: 40px; 
 }
 
 // timer
 .timer {
-  font-size: 120px;
-  font-family: "Source Sans Pro";
-  color: #22b996;
-  border-radius: 15px;
+font-size: 120px;
+font-family: "Source Sans Pro";
+color: #22b996;
+border-radius: 15px;
 }
 
-.btn {
-  cursor: pointer;
+.selected-div{
+background-color: #86213e;
 }
-
+@media only screen and (max-width: 150px) {
+.col-2-right{
+   position: fixed ; right: 2px;
+}
+}
+@media only screen and (max-width: 756px) {
+.col-2-right{
+ width: 100%;
+}
+}
