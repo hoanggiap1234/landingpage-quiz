@@ -86,6 +86,10 @@ export class ResultTestComponent implements OnInit {
     console.log(this.questions[this.questionNo]);
   }
 
+  openQuestion(index: number) {
+    this.questionNo = index;
+  }
+
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     console.log(event);
@@ -101,6 +105,17 @@ export class ResultTestComponent implements OnInit {
     // }
     // if (event.keyCode === KEY_CODE.DOWN_ARROW) {
     // }
+  }
+
+  checkCellChecked(question : IQuestion) : Boolean{
+    let check = false;
+    for( let i=0; i< question.answerDTOS.length; i++){
+      if(question.answerDTOS[i].status == true){
+        check = true;
+        break;
+      }
+    }
+    return check;
   }
 
 }

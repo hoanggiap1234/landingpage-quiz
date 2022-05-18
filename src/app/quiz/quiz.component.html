@@ -20,7 +20,7 @@
     </div>
 </nav>
 <section class="page-section portfolio" id="portfolio">
-    <div class="d-flex">
+    <div class="d-flex fs-5">
 
         <div class="col-sm-2 mt-5" >
             <div  style="position: fixed ;left: 2%;">
@@ -109,19 +109,22 @@
         </div>
 
         <div class="col-md-2 col-sm-12 mt-5 col-2-right ">
-            
-            <div class=" bg-secondary  pt-2 pb-1 px-1 text-white" style="margin-right: 5px;">
-                <h5 class="text-center"> Danh sách câu hỏi</h5>
-            </div>
-            <div #elmoption>
-                <div   class="align-items-top mt-1" >
-                    <div style="    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: start;" >
-                        <div id="grid" *ngFor="let question of questions ; let i = index" style="margin-right: 5px;">
-                            <a>
-                                <div class=" btn cell d-flex"  [ngClass]="'id'+ question.id" (click)="openQuestion(i)"> {{i+1}} </div>
-                            </a>
+            <div style="position: fixed ;left: 83%;">
+        
+                <div class=" bg-secondary  pt-2 pb-1 px-1 text-white" style="margin-right: 5px;">
+                    <h5 class="text-center"> Danh sách câu hỏi</h5>
+                </div>
+                <div #elmoption>
+                    <div class="align-items-top mt-1">
+                        <div style="    display: flex;
+                            flex-wrap: wrap;
+                            justify-content: start;">
+                            <div id="grid" *ngFor="let question of questions ; let i = index" style="margin-right: 5px;">
+                                <a>
+                                    <div class=" btn cell d-flex" [ngClass]="'id'+ question.id" (click)="openQuestion(i)">
+                                        {{i+1}} </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -255,6 +255,7 @@ export class QuizComponent implements OnInit {
   }
 
   submitResultTest() {
+    
     // console.log(this.questions);
     // console.log("is submit result test");
     this.questions.forEach((element) => {
@@ -271,6 +272,7 @@ export class QuizComponent implements OnInit {
 
     // console.log(this.resultTest);
     this.callAPIPostDataQuizToDb();
+    alert("Bạn đã gửi kết quả bài thi, mời bạn xem kết quả !");
   }
 
   callAPIPostDataQuizToDb(){
