@@ -17,6 +17,7 @@
                 <!-- <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded">Xem Điểm Thi</a></li> -->
             <!-- </ul> -->
         <!-- </div> -->
+        <span class="text-white">Họ và tên: {{user.name}}</span>
     </div>
 </nav>
 <section class="page-section portfolio" id="portfolio">
@@ -29,13 +30,13 @@
 
                 <hr style="background-color:white">
                 <h1 class="text-center justify-content-center pb-2">
-                    <countdown #countdown [config]="{leftTime: time}" (event)="handleEventCountDown($event)">
+                    <countdown #countdown [config]="{leftTime: time}" (event)="handleEventCountDown($event)" (notify)="onNotify($event)">
                     </countdown>
                 </h1>
                 </div>
                 <hr>
                 <div class="d-grid">
-                    <button class="btn btn-primary fs-5" type="button" (click)="submitResultTest()">Kết thúc bài
+                    <button class="btn btn-primary fs-5" type="button" (click)="openModal()">Kết thúc bài
                         thi</button>
                 </div>
             </div>
@@ -69,8 +70,8 @@
                                     <h4>Câu số: {{questionNo +1}}</h4>
                                     <span>(Tổng số: {{questions.length}} câu hỏi)</span>
                                     <span class="form-check form-group mb-2 float-end">
-                                        <label class="form-check-label">Xem lại</label>
-                                        <input class="form-check-input" type="checkbox" [checked]="questions[questionNo].review"  [ngClass]="'review'+ questionNo" (click)="onCheckedReview( questionNo, questions[questionNo])"/>
+                                        <label class="form-check-label" for="review">Xem lại</label>
+                                        <input class="form-check-input" id="review" type="checkbox" [checked]="questions[questionNo].review"  [ngClass]="'review'+ questionNo" (click)="onClickedReviewCheckbox( questionNo, questions[questionNo])"/>
                                     </span>
                                 </div>
                             </div>
@@ -86,10 +87,10 @@
                                 <div class="mt-5">
                                     <div class="form-check form-group mb-2"
                                         *ngFor="let option of questions[questionNo].answerDTOS">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                        <input class="form-check-input"  type="checkbox" value="" [id]="option.id"
                                             [checked]="option.status" (click)="onClickChecBox(option, questions[questionNo] )"
                                             [disabled]="isDisabled" />
-                                        <label class="form-check-label" for="flexCheckDefault">{{option.answer}}</label>
+                                        <label class="form-check-label" [for]="option.id">{{option.answer}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -120,10 +121,14 @@
                             flex-wrap: wrap;
                             justify-content: start;">
                             <div id="grid" *ngFor="let question of questions ; let i = index" style="margin-right: 5px;">
-                                <a>
+                                <a>                                    
                                     <div class=" btn cell d-flex" [ngClass]="'id'+ question.id" (click)="openQuestion(i)">
                                         {{i+1}} </div>
                                 </a>
+                                <!-- <a *ngIf="!checkClickOption(question)">                                    
+                                    <div class=" btn cell d-flex" [ngClass]="'id'+ question.id"  (click)="openQuestion(i)">
+                                        {{i+1}} </div>
+                                </a> -->
                             </div>
                         </div>
                     </div>
@@ -132,45 +137,35 @@
         </div>
     </div>
 </section>
-<!-- 
-<div class="container" style="border:1px solid red ;">
-    <div class="d-flex flex-wrap">
-        <div class="test1 col-6 col-md-3 col-sm-4">
-            <button class="btn btn-danger"> test1</button>
-        </div>
-        <div class="test2 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test2</button>
-        </div>
-        <div class="test3 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-primary"> test3</button>
-        </div>
-        <div class="test1 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test1</button>
-        </div>
-        <div class="test2 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test2</button>
-        </div>
-        <div class="test3 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-primary"> test3</button>
-        </div>
-        <div class="test1 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test1</button>
-        </div>
-        <div class="test2 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test2</button>
-        </div>
-        <div class="test3 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-primary"> test3</button>
-        </div>
-        <div class="test1 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test1</button>
-        </div>
-        <div class="test2 col-6 col-md-3 col-sm-4 ">
-            <button class="btn btn-danger"> test2</button>
-        </div>
-        <div class="test3 col-6 col-md-3  col-sm-4">
-            <button class="btn btn-primary"> test3</button>
-        </div>
+<modal #myModal>
+    <modal-header style="color: blue">
+         <h4><i class="fa-solid fa-triangle-exclamation"></i> Thông báo !</h4>
+    </modal-header>
+ 
+    <modal-content>
+       
+        <h4 class="text-primary"  *ngIf="isQuized" >Bạn sẽ kết thúc làm bài ngay bây giờ !</h4>
+       
+        <h4 class="text-primary"  *ngIf="!isQuized">Bạn chưa thực hiện bài thi !</h4>
+    </modal-content>
+ 
+    <modal-footer>
+        <button class="btn btn-secondary" (click)="closeModal()">Quay lại</button> 
+        &nbsp;&nbsp;&nbsp; <button class="ml-3 btn btn-primary"  *ngIf="isQuized" (click)="submitResultTest()">Kết thúc</button>
+    </modal-footer>
+</modal>
 
-    </div>
-</div> -->
+<modal #myModalTimer>
+    <modal-header style="color: blue">
+         <h4><i class="fa-solid fa-triangle-exclamation"></i> Thông báo !</h4>
+    </modal-header>
+ 
+    <modal-content>
+        <h4 class="text-primary">Hết thời gian làm bài, hệ thống sẽ tự động gửi bài thi ngay bây giờ!</h4>
+    </modal-content>
+ 
+    <modal-footer>
+        <button class="btn btn-secondary" (click)="closeModal()">Quay lại</button> 
+        &nbsp;&nbsp;&nbsp; <button class="ml-3 btn btn-primary"  *ngIf="isQuized" (click)="submitResultTest()">Kết thúc</button>
+    </modal-footer>
+</modal>

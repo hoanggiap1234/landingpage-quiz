@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { UserModule } from '../model/user';
 import { UserService } from '../service/user.service';
+import { ModalManager } from 'ngb-modal';
+import { QuizService } from '../service/quiz.service';
+import { IQuestion } from '../model/question';
 
 @Component({
   selector: 'app-home',
@@ -19,17 +22,26 @@ export class HomeComponent implements OnInit {
     phone: ['',[Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')]]
   });
 
+  @ViewChild('myModal') myModal: any;
+  private modalRef: any;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private modalService: ModalManager,
+    private quizService: QuizService
     ){}
  
     startQuiz(){
-      alert("Bạn sẽ được chuyển sang trang làm bài thi !")
-    this.setDataFromFormToModel();
-    this.router.navigate(['/quiz'])
-  }
+      var seconds = new Date().getTime();
+      let time_stop = seconds + 10000
+      localStorage.setItem('time_stop', time_stop.toString())
+      
+
+      this.router.navigate(['/quiz'])
+      this.closeModal()
+    }
 
   ngOnInit(): void {
   }
@@ -43,5 +55,32 @@ export class HomeComponent implements OnInit {
     this.userService.setUser(this.user);
     sessionStorage.setItem('user',JSON.stringify(this.user));
   }
+
+  openModal(){
+    this.setDataFromFormToModel();
+    this.modalRef = this.modalService.open(this.myModal, {
+        size: "md",
+        modalClass: 'mymodal',
+        hideCloseButton: false,
+        centered: false,
+        backdrop: true,
+        animation: true,
+        keyboard: false,
+        closeOnOutsideClick: false,
+        backdropClass: "modal-backdrop"
+    })
+    this.resetForm()
+}
+resetForm(){
+  this.userForm.patchValue({
+    name: '',
+    email: '',
+    phone: ''
+  })
+}
+closeModal(){
+    this.modalService.close(this.modalRef);
+    //or this.modalRef.close();
+}
 
 }
