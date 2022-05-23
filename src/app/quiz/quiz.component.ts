@@ -383,6 +383,10 @@ export class QuizComponent implements OnInit {
           // this.redirectToResultTest(id)
           this.quizService.getResultTest(resp);
           this.router.navigate(['/quiz/result']);
+        }else{
+          sessionStorage.removeItem('user')
+          alert("Bạn chưa thực hiện bài thi, bạn cần đăng nhập lại để làm bài")
+          this.router.navigate(['']);
         }
       },
 

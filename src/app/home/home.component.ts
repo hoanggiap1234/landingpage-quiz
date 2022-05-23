@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
  
     startQuiz(){
       var seconds = new Date().getTime();
-      let time_stop = seconds + 10000
+      let time_stop = seconds + 180000
       localStorage.setItem('time_stop', time_stop.toString())
       
 
@@ -69,7 +69,6 @@ export class HomeComponent implements OnInit {
         closeOnOutsideClick: false,
         backdropClass: "modal-backdrop"
     })
-    this.resetForm()
 }
 resetForm(){
   this.userForm.patchValue({
