@@ -125,4 +125,15 @@ export class ResultTestComponent implements OnInit {
     return check;
   }
 
+  findAnswersedIsTrueOrFalse(questionId: any): boolean {
+    let check = false;
+    for (let i = 0; i < this.resultTest.yourQuestions.length; i++) {
+      if (this.resultTest.yourQuestions[i].question.id == questionId
+        && this.resultTest.yourQuestions[i].correctAnswerForThisQuestion == true) {
+        check = true
+      }
+    }
+    return check;
+  }
+
 }

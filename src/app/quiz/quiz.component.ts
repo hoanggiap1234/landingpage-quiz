@@ -83,8 +83,14 @@ export class QuizComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    // if(localStorage.getItem('userId') !=null ){
-    //   this.router.navigate(['quiz/result'])
+   
+    if(localStorage.getItem('userId') != 'null' && localStorage.getItem('userId') != null ){
+      alert("Bạn cần thoát trước khi làm lại bài")
+      this.router.navigate(['quiz/result'])
+    }
+    // if(this.countdown.left == 0 ){
+    //   alert("hết thời gian")
+    //   this.router.navigate([''])
     // }
 
     var seconds = new Date().getTime();
@@ -199,7 +205,7 @@ export class QuizComponent implements OnInit {
     this.countdownTime = $event.left;
     if ($event.left === 0) {
       this.isDisabled = true;
-      alert("Hết thời gian, hệ thống sẽ tự động hiển thị kết quả làm bài");
+     this.onTimerFinished()
       // submit and redirect to result
       this.submitResultTest();
     }
@@ -207,8 +213,9 @@ export class QuizComponent implements OnInit {
   }
 
   onTimerFinished() {
-    alert("Time's up, mate")
+      alert("Hết thời gian, hệ thống sẽ tự động hiển thị kết quả làm bài");
   }
+
 
   onNotify(event : Event) {
     console.log(this.countdown.left);
@@ -384,7 +391,7 @@ export class QuizComponent implements OnInit {
           this.quizService.getResultTest(resp);
           this.router.navigate(['/quiz/result']);
         }else{
-          sessionStorage.removeItem('user')
+          this.resetQuiz();
           alert("Bạn chưa thực hiện bài thi, bạn cần đăng nhập lại để làm bài")
           this.router.navigate(['']);
         }

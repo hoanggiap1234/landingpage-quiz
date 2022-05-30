@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
  
     startQuiz(){
       var seconds = new Date().getTime();
-      let time_stop = seconds + 180000
+      let time_stop = seconds + 60000
       localStorage.setItem('time_stop', time_stop.toString())
       
 
@@ -44,6 +44,8 @@ export class HomeComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    console.log(localStorage.getItem('userId'));
+    
   }
 
   setDataFromFormToModel(){
@@ -54,7 +56,7 @@ export class HomeComponent implements OnInit {
     }
     this.userService.setUser(this.user);
     sessionStorage.setItem('user',JSON.stringify(this.user));
-  }
+  } 
 
   openModal(){
     this.setDataFromFormToModel();

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,6 +9,12 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'landingpage-quiz';
 
+//   @HostListener("window:load",["$event"])
+//     clearLocalStorage(event : any){
+//         localStorage.clear();
+//     }
+
 }
+
 
 
