@@ -63,10 +63,7 @@ export class QuizComponent implements OnInit {
   constructor(
     private highlightService: HighLightService,
     private quizService: QuizService,
-    private userService: UserService,
     private router: Router,
-    private elem: ElementRef,
-    private renderer: Renderer2,
     private modalService: ModalManager,
     @Inject(DOCUMENT) document: Document
     ) {}
@@ -108,21 +105,24 @@ export class QuizComponent implements OnInit {
     // localStorage.setItem('timeLocal', 'started');
     
    
-    this.quizService.getQuestion().subscribe((data) => {
-      this.questions = data;
-      // console.log(data);
+    // this.quizService.getQuestion().subscribe((data) => {
+    //   this.questions = data;
+    //   // console.log(data);
       
-      data.forEach((item: IQuestion) => {
-        item.review = false;
-        item.answerDTOS.forEach((element: any) => {
-          element['status'] = false;
+    //   data.forEach((item: IQuestion) => {
+    //     item.review = false;
+    //     item.answerDTOS.forEach((element: any) => {
+    //       element['status'] = false;
          
-        });
-      });
-    });    
+    //     });
+    //   });
+    // });    
     // this.setColorBackgroundMatrixCell();
     // this.filColorReviewAfterRefresh()
-  }
+    let jsonQuestion = localStorage.getItem('questions');
+    if(jsonQuestion != undefined)
+    this.questions = JSON.parse(jsonQuestion);
+    }
 
   checkClickOption(question: IQuestion) {
     // Khi refresh trang , nếu bạn đã checked ở option nào thì sẽ gọi lại để lấy lại trạng thái của nó,
@@ -196,6 +196,8 @@ export class QuizComponent implements OnInit {
   ngAfterViewInit () {
     // this.countdown.pause();
     // this.countdown.resume();
+    this.setColorToMatrixQuestionsAfterRefresh();
+  
   }
 
 
@@ -237,6 +239,7 @@ export class QuizComponent implements OnInit {
       this.highlightService.highlightAll()
       // this.highlighted = true
     }
+  
   }
 // add viewchid để set color cho matran câu hỏi
   // add viewchid để set color cho matran câu hỏi
@@ -305,6 +308,8 @@ export class QuizComponent implements OnInit {
     if (this.reviewElement.nativeElement.querySelector(reviewID).checked === false) {
       this.optionElement.nativeElement.querySelector(className).classList.remove('cell_review');
     }
+    // luu lai thay doi cuar questions sau khi refresh
+    localStorage.setItem('questions', JSON.stringify(this.questions))
   }
  
   nextQuestion() {
@@ -441,5 +446,21 @@ checkvQuized(){
 }
 
 
+setColorToMatrixQuestionsAfterRefresh(){
 
+  for(let i=0; i< this.questions.length; i++){
+    const className = '.id' + this.questions[i].id;
+    if(this.questions[i].review === true){
+      this.optionElement.nativeElement.querySelector(className).classList.remove('cell_review');
+      this.optionElement.nativeElement.querySelector(className).classList.add('cell_review');
+    }
+      for( let j=0;j<this.questions[i].answerDTOS.length; j++){
+        if(this.questions[i].answerDTOS[j].status === true){
+          this.optionElement.nativeElement.querySelector(className).classList.remove('cellChecked');
+          this.optionElement.nativeElement.querySelector(className).classList.add('cellChecked');
+        }
+      }
+   
+  }
+}
 }
