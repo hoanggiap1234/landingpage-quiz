@@ -68,27 +68,16 @@ export class QuizComponent implements OnInit {
     @Inject(DOCUMENT) document: Document
     ) {}
 
-    async getQuestionInLocalStorage(){
-      this.questionNo = 0;
-      const jsonQuestion = localStorage.getItem('questions');
-       if(jsonQuestion !=null){
-        this.questions =  JSON.parse(jsonQuestion);
-        console.log(this.questions);
-        
-      }
-     
-    }
-
   ngOnInit(): void {
+    let jsonQuestion = localStorage.getItem('questions');
+    if(jsonQuestion != undefined)
+    this.questions = JSON.parse(jsonQuestion);
+    // this.questions = this.quizService.getQuestions()
    
     if(localStorage.getItem('userId') != 'null' && localStorage.getItem('userId') != null ){
       alert("Bạn cần thoát trước khi làm lại bài")
       this.router.navigate(['quiz/result'])
     }
-    // if(this.countdown.left == 0 ){
-    //   alert("hết thời gian")
-    //   this.router.navigate([''])
-    // }
 
     var seconds = new Date().getTime();
     const time_stop = localStorage.getItem('time_stop');
@@ -119,9 +108,8 @@ export class QuizComponent implements OnInit {
     // });    
     // this.setColorBackgroundMatrixCell();
     // this.filColorReviewAfterRefresh()
-    let jsonQuestion = localStorage.getItem('questions');
-    if(jsonQuestion != undefined)
-    this.questions = JSON.parse(jsonQuestion);
+   
+    
     }
 
   checkClickOption(question: IQuestion) {
@@ -196,6 +184,7 @@ export class QuizComponent implements OnInit {
   ngAfterViewInit () {
     // this.countdown.pause();
     // this.countdown.resume();
+    // window.location.reload();
     this.setColorToMatrixQuestionsAfterRefresh();
   
   }

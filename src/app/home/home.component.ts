@@ -7,6 +7,8 @@ import { UserService } from '../service/user.service';
 import { ModalManager } from 'ngb-modal';
 import { QuizService } from '../service/quiz.service';
 import { IQuestion } from '../model/question';
+import { HttpClient } from '@angular/common/http';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,7 @@ export class HomeComponent implements OnInit {
     phone: ['',[Validators.required, Validators.pattern('(84|0[3|5|7|8|9])+([0-9]{8})')]]
   });
 
-  questions!: IQuestion;
+  questions!: IQuestion[];
 
   @ViewChild('myModal') myModal: any;
   private modalRef: any;
@@ -32,17 +34,20 @@ export class HomeComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private modalService: ModalManager,
-    private quizService: QuizService
+    private quizService: QuizService,
     ){}
  
     startQuiz(){
+      debugger
+      this.callQuestion()
       var seconds = new Date().getTime();
-      let time_stop = seconds + 60000
-      localStorage.setItem('time_stop', time_stop.toString())
-      
-
+      localStorage.setItem('questions', JSON.stringify(this.questions));
       this.router.navigate(['/quiz'])
       this.closeModal()
+      let time_stop = seconds + 60000
+      localStorage.setItem('time_stop', time_stop.toString())
+      this.userService.setUser(this.user);
+      sessionStorage.setItem('user',JSON.stringify(this.user));
     }
 
   ngOnInit(): void {
@@ -50,31 +55,30 @@ export class HomeComponent implements OnInit {
     
   }
 
-  setDataFromFormToModel(){
+  setDataFromFormToModel(){ 
     this.user = {
       name: this.userForm.get(['name'])?.value,
       email: this.userForm.get(['email'])?.value,
       phone: this.userForm.get(['phone'])?.value,
     }
-    this.userService.setUser(this.user);
-    sessionStorage.setItem('user',JSON.stringify(this.user));
-
-    this.quizService.getQuestion().subscribe((data) => {
-      this.questions = data;
-      // console.log(data);
-      
-      data.forEach((item: IQuestion) => {
-        item.review = false;
-        item.answerDTOS.forEach((element: any) => {
-          element['status'] = false;
-         
-        });
-      });
-      localStorage.setItem('questions', JSON.stringify(this.questions))
-    });  
-    
-    
   } 
+
+
+  async callQuestion(){
+  this.quizService.getQuestion().subscribe(async  (data) => {
+    this.questions = data;
+    this.quizService.setQuestion(this.questions);
+     // console.log(data);
+     data.forEach((item: IQuestion) => {
+       item.review = false;
+       item.answerDTOS.forEach((element: any) => {
+         element['status'] = false;
+
+       });
+     });
+       localStorage.setItem('questions', JSON.stringify(this.questions));
+   }); 
+  }
 
   openModal(){
     this.setDataFromFormToModel();

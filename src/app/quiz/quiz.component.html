@@ -90,7 +90,7 @@
                                         <input class="form-check-input"  type="checkbox" value="" [id]="option.id"
                                             [checked]="option.status" (click)="onClickChecBox(option, questions[questionNo] )"
                                             [disabled]="isDisabled" />
-                                        <label class="form-check-label" [for]="option.id">{{option.answer}}</label>
+                                        <label class="form-check-label" [for]="option.id">{{option.answer }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -120,10 +120,10 @@
                         <div style="    display: flex;
                             flex-wrap: wrap;
                             justify-content: start;">
-                            <div id="grid" *ngFor="let question of questions ; let i = index" style="margin-right: 5px;">
+                            <div id="grid" *ngFor="let question of  questions  ; let i = index" style="margin-right: 5px;">
                                 <a>                                    
                                     <div class=" btn cell d-flex" [ngClass]="'id'+ question.id" (click)="openQuestion(i)">
-                                        {{i+1}} </div>
+                                        {{i+1 }} </div>
                                 </a>
                                 <!-- <a *ngIf="!checkClickOption(question)">                                    
                                     <div class=" btn cell d-flex" [ngClass]="'id'+ question.id"  (click)="openQuestion(i)">
