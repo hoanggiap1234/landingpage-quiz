@@ -69,9 +69,7 @@ export class QuizComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    let jsonQuestion = localStorage.getItem('questions');
-    if(jsonQuestion != undefined)
-    this.questions = JSON.parse(jsonQuestion);
+  
     // this.questions = this.quizService.getQuestions()
    
     if(localStorage.getItem('userId') != 'null' && localStorage.getItem('userId') != null ){
@@ -108,7 +106,9 @@ export class QuizComponent implements OnInit {
     // });    
     // this.setColorBackgroundMatrixCell();
     // this.filColorReviewAfterRefresh()
-   
+    let jsonQuestion = localStorage.getItem('questions');
+    if(jsonQuestion != undefined)
+    this.questions = JSON.parse(jsonQuestion);
     
     }
 
