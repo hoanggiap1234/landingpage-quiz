@@ -76,6 +76,15 @@ export class QuizComponent implements OnInit {
       alert("Bạn cần thoát trước khi làm lại bài")
       this.router.navigate(['quiz/result'])
     }
+   
+    var jsonQuestion = localStorage.getItem('questions');
+    if(jsonQuestion =='undefined'|| jsonQuestion == null){
+      this.callQuestion();
+    }else{     
+      this.questions = JSON.parse(jsonQuestion);
+    }
+    // if(jsonQuestion != undefined)
+    // this.questions = JSON.parse(jsonQuestion);
 
     var seconds = new Date().getTime();
     const time_stop = localStorage.getItem('time_stop');
@@ -106,11 +115,28 @@ export class QuizComponent implements OnInit {
     // });    
     // this.setColorBackgroundMatrixCell();
     // this.filColorReviewAfterRefresh()
-    let jsonQuestion = localStorage.getItem('questions');
-    if(jsonQuestion != undefined)
-    this.questions = JSON.parse(jsonQuestion);
+    // this.callQuestion()
+    // let jsonQuestion = localStorage.getItem('questions');
+    // if(jsonQuestion != undefined)
+    // this.questions = JSON.parse(jsonQuestion);
     
     }
+
+    async callQuestion(){
+      this.quizService.getQuestion().subscribe(async  (data) => {
+        this.questions = data;
+        this.quizService.setQuestion(this.questions);
+         // console.log(data);
+         data.forEach((item: IQuestion) => {
+           item.review = false;
+           item.answerDTOS.forEach((element: any) => {
+             element['status'] = false;
+    
+           });
+         });
+           localStorage.setItem('questions', JSON.stringify(this.questions));
+       }); 
+      }
 
   checkClickOption(question: IQuestion) {
     // Khi refresh trang , nếu bạn đã checked ở option nào thì sẽ gọi lại để lấy lại trạng thái của nó,

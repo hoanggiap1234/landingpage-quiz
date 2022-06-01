@@ -38,8 +38,7 @@ export class HomeComponent implements OnInit {
     ){}
  
     startQuiz(){
-      debugger
-      this.callQuestion()
+      // this.callQuestion()
       var seconds = new Date().getTime();
       localStorage.setItem('questions', JSON.stringify(this.questions));
       this.router.navigate(['/quiz'])
