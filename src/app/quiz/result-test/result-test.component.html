@@ -1,7 +1,7 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand  align-items-center" href="#page-top">Kết quả bài thi trắc nghiệm java</a>
+        <a class="navbar-brand  align-items-center" href="#page-top" (click)="resetQuiz()">Kết quả bài thi trắc nghiệm java</a>
         <!-- <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -17,12 +17,13 @@
                 <!-- <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded">Xem Điểm Thi</a></li> -->
             <!-- </ul> -->
         <!-- </div> -->
+        <span class="text-white">Họ và tên: {{user.name}}</span>
     </div>
 </nav>
 <section class="page-section portfolio" id="portfolio">
     <div class="d-flex fs-5">
         <div class="col-sm-2 mt-5">
-            <div style=" position: fixed ;left: 2%; width: 13%;">
+            <div style=" position: fixed ;left: 1%; width: 16%;">
                 <div class="pt-2 pb-1 px-1 text-white mb-3 " style="background-color: blue">
                     <h5>Tổng số: <span class="float-end"> {{questions.length}}</span></h5>
                 </div>
@@ -67,12 +68,26 @@
                                     <!-- <div [innerHTML]="htmlContent"></div> -->
                                 </div>
                                 <div class="mt-5">
+                                    
                                     <div class="form-check form-group mb-2"
                                         *ngFor="let option of questions[questionNo].answerDTOS">
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
                                             [checked]="option.status" 
                                             [disabled]="true" />
-                                        <label class="form-check-label" for="flexCheckDefault">{{option.answer}}</label>
+                                            
+                                        <!-- <div *ngIf="findAnswersedIsTrueOrFalse(questions[questionNo].id) == true ; then optiontrue else optionFalse" for="flexCheckDefault"></div>
+                                        <ng-template #optiontrue>
+                                            <label class="form-check-label bg-primary" for="flexCheckDefault">{{option.answer}}</label>
+                                        </ng-template>
+                                        <ng-template #optionFalse>
+                                            <label class="form-check-label bg-danger" for="flexCheckDefault">{{option.answer}}</label>
+                                        </ng-template> -->
+
+                                        <div *ngIf="findAnswersedIsTrueOrFalse(questions[questionNo].id) == false && option.status==true"  class="form-check-label bg-danger">{{option.answer}}</div>
+                                        <div *ngIf="findAnswersedIsTrueOrFalse(questions[questionNo].id) == true && option.status==true"  class="form-check-label bg-primary">{{option.answer}}</div>
+                                        <div *ngIf="findAnswersedIsTrueOrFalse(questions[questionNo].id) == false && option.status==false " class="form-check-label">{{option.answer}}</div>
+                                        <div *ngIf="findAnswersedIsTrueOrFalse(questions[questionNo].id) == true && option.status==false " class="form-check-label">{{option.answer}}</div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -102,9 +117,9 @@
                         flex-wrap: wrap;
                         justify-content: start;" >
                             <div id="grid" *ngFor="let question of questions ; let i = index" style="margin-right: 5px;">
-                                <a>
+                                <!-- <a>
                                     <div class=" btn cell d-flex"
-                                        *ngIf="checkCellChecked(question) == true; then cellChecked ; else cellNotCheck"> </div>
+                                        *ngIf="checkCellChecked(question) == true ; then cellChecked ; else cellNotCheck"> </div>
                                 </a>
                                 <ng-template #cellChecked>
                                     <a>
@@ -113,15 +128,42 @@
                                 </ng-template>
                                 <ng-template #cellNotCheck>
                                     <a>
-                                        <div #templateName class=" btn cell d-flex" (click)="openQuestion(i)"> {{i+1}} </div>
+                                        <div class=" btn cell d-flex" (click)="openQuestion(i)"> {{i+1}} </div>
                                     </a>
                                 </ng-template>
+                                <ng-template #cell_false>
+                                    <a>
+                                        <div class=" btn cell d-flex cell_false" (click)="openQuestion(i)"> {{i+1}} </div>
+                                    </a>
+                                </ng-template> -->
+
+                                <a *ngIf="checkCellChecked(question) == true &&  findAnswersedIsTrueOrFalse(question.id) ==true" (click)="openQuestion(i)">
+                                    <div class=" btn cell cellChecked d-flex"> {{i+1}}</div>
+                                </a>
+                                <a *ngIf="checkCellChecked(question) == true &&  findAnswersedIsTrueOrFalse(question.id) ==false" (click)="openQuestion(i)">
+                                    <div class=" btn cell cell_false d-flex"> {{i+1}}</div>
+                                </a>
+                                <a *ngIf="checkCellChecked(question) == false &&  findAnswersedIsTrueOrFalse(question.id) ==true" (click)="openQuestion(i)">
+                                    <div class=" btn cell  d-flex"> {{i+1}}</div>
+                                </a>
+                                <a *ngIf="checkCellChecked(question) == false &&  findAnswersedIsTrueOrFalse(question.id) ==false" (click)="openQuestion(i)">
+                                    <div class=" btn cell  d-flex"> {{i+1}}</div>
+                                </a>
+
+
+                              
+                                
                             </div>
                         </div>
                     </div>
+                    
                 </div>
+                <div class=" mt-5">
+                    <button class="btn btn-primary btn-lg btn-block" type="button" (click)="resetQuiz()">Thoát </button>
+                </div>
+               
             </div>
-            
+           
             
         </div>
     </div>

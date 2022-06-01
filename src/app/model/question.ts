@@ -3,6 +3,7 @@ export interface IQuestion{
   title : string,
   description : string,
   review: boolean,
+  isAnswersed: boolean,
   answerDTOS: [{
     id: string,
     answer: string,
@@ -16,6 +17,7 @@ export class Question implements IQuestion{
   title!: string;
   description!: string;
   review!: boolean;
+  isAnswersed!: boolean;
   answerDTOS!: [{
     id: string;
     answer: string;

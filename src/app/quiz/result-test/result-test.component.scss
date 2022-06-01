@@ -92,6 +92,18 @@ height: 40px;
 width: 40px; 
 }
 
+.cell_false{
+  margin-right: 5px;
+  font-size: large;
+  margin-top: 5px;
+  background-color: rgb(211, 53, 14);
+  color: #fff;
+  outline: 0px solid #fff;
+  float: left;
+  height: 40px;
+  width: 40px; 
+  }
+
 // timer
 .timer {
 font-size: 120px;
@@ -103,13 +115,11 @@ border-radius: 15px;
 .selected-div{
 background-color: #86213e;
 }
-@media only screen and (max-width: 150px) {
-.col-2-right{
-   position: fixed ; right: 2px;
-}
-}
-@media only screen and (max-width: 756px) {
-.col-2-right{
- width: 100%;
-}
+// @media only screen and (max-width: 150px) {
+// .col-2-right{
+//    position: fixed ; right: 2px;
+// }
+// }
+@media only screen and (max-width: 819px) {
+
 }

@@ -8,11 +8,13 @@ import { HomeComponent } from './home/home.component';
 import { HighLightService } from './service/high-light.service';
 import { QuizService } from './service/quiz.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CountdownModule } from 'ngx-countdown';
 import { CommonModule } from '@angular/common';
 import { TimerComponent } from './timer/timer.component';
-import { ResultTestComponent } from './result-test/result-test.component';
+import { ResultTestComponent } from './quiz/result-test/result-test.component';
+import { StarquizPopupComponent } from './home/starquiz-popup/starquiz-popup.component';
+import { ModalModule } from 'ngb-modal';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { ResultTestComponent } from './result-test/result-test.component';
     HomeComponent,
     TimerComponent,
     ResultTestComponent,
+    StarquizPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,9 @@ import { ResultTestComponent } from './result-test/result-test.component';
     AppRoutingModule,
     HttpClientModule,
     CountdownModule ,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule,
+    FormsModule
   ],
   providers:  [HttpClientModule, FormBuilder,HighLightService, QuizService],
   bootstrap: [AppComponent],

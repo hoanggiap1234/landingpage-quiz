@@ -1,8 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IQuestion } from '../model/question';
-import { HighLightService } from '../service/high-light.service';
-import { QuizService } from '../service/quiz.service';
+import { IQuestion } from '../../model/question';
+import { HighLightService } from '../../service/high-light.service';
+import { QuizService } from '../../service/quiz.service';
 export enum KEY_CODE {
   RIGHT_ARROW = 39,
   LEFT_ARROW = 37,
@@ -27,17 +27,23 @@ export class ResultTestComponent implements OnInit {
     private highlightService : HighLightService,
     private router : Router
   ) { }
-
+ user : any
   ngOnInit(): void {
+    const jsonUser = sessionStorage.getItem('user');
+    if(jsonUser == undefined || jsonUser == null ){
+      this.router.navigate([''])
+    }
+    this.user = JSON.parse(jsonUser!.toString());
 
-    const user = sessionStorage.getItem('user');
-    if(user == null || user == undefined){
+    // const user = sessionStorage.getItem('user');
+    // if(user == null || user == undefined){
+    //   this.router.navigate(['']);
+    // }
+    const id = localStorage.getItem('userId');
+    if(id== 'null' || id == 'undefined'){
+      alert("Hệ thống ghi nhận bạn chưa thực hiện bài thi, chúng tôi không có kết quả của bạn")
       this.router.navigate(['']);
     }
-    const id = localStorage.getItem('userId');
-    // if(id == null || id == undefined){
-    //   this.router.navigate(['/quiz']);
-    // }
     const jsonQuestion = localStorage.getItem('questions')
     
     if (jsonQuestion != null)
@@ -63,6 +69,7 @@ export class ResultTestComponent implements OnInit {
   resetQuiz(){
     localStorage.removeItem('questions');
     localStorage.removeItem('userId');
+    localStorage.removeItem('time_stop');
     sessionStorage.removeItem('user')
     localStorage.clear();
     this.router.navigate(['']);
@@ -113,6 +120,17 @@ export class ResultTestComponent implements OnInit {
       if(question.answerDTOS[i].status == true){
         check = true;
         break;
+      }
+    }
+    return check;
+  }
+
+  findAnswersedIsTrueOrFalse(questionId: any): boolean {
+    let check = false;
+    for (let i = 0; i < this.resultTest.yourQuestions.length; i++) {
+      if (this.resultTest.yourQuestions[i].question.id == questionId
+        && this.resultTest.yourQuestions[i].correctAnswerForThisQuestion == true) {
+        check = true
       }
     }
     return check;

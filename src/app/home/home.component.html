@@ -116,7 +116,12 @@
                 </div>
                 <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-lg-4 ms-auto"><p class="lead">Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p></div>
+                    <div class="col-lg-4 ms-auto">
+                        <p class="lead">
+                            <b class="text-danger">Thời gian làm bài</b>: 180 phút
+                            <br>
+                            <b class="text-danger">Cách làm</b> : Chọn 1 hoặc nhiều đáp án cho là đúng, câu trả lời được tính là đúng nếu không chọn đúng và đủ các lựa chọn đúng của câu hỏi
+                        </p></div>
                     <div class="col-lg-4 me-auto"><p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p></div>
                 </div>
                 <!-- About Section Button-->
@@ -149,7 +154,7 @@
                         <!-- To make this form functional, sign up at-->
                         <!-- https://startbootstrap.com/solution/contact-forms-->
                         <!-- to get an API token!-->
-                        <form id="contactForm" data-sb-form-api-token="API_TOKEN"  [formGroup]="userForm" (ngSubmit)="startQuiz()">
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN"  [formGroup]="userForm" (ngSubmit)="openModal()">
                             <!-- Name input-->
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="name" type="text" placeholder="Enter your name..."  formControlName="name"/>
@@ -186,7 +191,7 @@
                                 </div>
                             </div>
                             <!-- Submit Button-->
-                            <button class="btn btn-primary btn-xl" type="submit" id="submitButton" [disabled]="userForm.invalid">Bắt đâu làm bài</button>
+                            <button class="btn btn-primary btn-xl" type="submit" id="submitButton" [disabled]="userForm.invalid">Gửi thông tin</button>
                         </form>
                     </div>
                 </div>
@@ -400,7 +405,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Submarine</h2>
+                                    <h2 class="portfolio-modal-title text-   text-uppercase mb-0">Submarine</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -422,6 +427,19 @@
                 </div>
             </div>
         </div>
-
+        <modal #myModal>
+            <modal-header>
+                 <h4><i class="fa-solid fa-triangle-exclamation"></i> Thông báo !</h4>
+            </modal-header>
+         
+            <modal-content>
+                <h4 class="text-primary">Chúng tôi sẽ tính giờ ngay sau khi bạn bắt đầu !</h4>
+            </modal-content>
+         
+            <modal-footer>
+                <button class="btn btn-secondary" (click)="closeModal()">Quay lại</button> 
+                &nbsp;&nbsp;&nbsp; <button class="ml-3 btn btn-primary" (click)="startQuiz()">Bắt đầu làm bài</button>
+            </modal-footer>
+        </modal>
        
 
